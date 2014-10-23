@@ -28,11 +28,11 @@ def compareTopMovies(data,usr1, usr2):
 
 def test():
 	unames = ['user_id', 'gender', 'age', 'occupation', 'zip']
-	users = pd.read_table('./data_files/ml-1m/users.dat', sep='::', header=None, names=unames, engine='python')
+	users = pd.read_table('/data_files/ml-1m/users.dat', sep='::', header=None, names=unames, engine='python')
 	rnames = ['user_id', 'movie_id', 'rating', 'timestamp']
-	ratings = pd.read_table('./data_files/ml-1m/ratings.dat', sep='::', header=None, names=rnames,  engine='python')
+	ratings = pd.read_table('/data_files/ml-1m/ratings.dat', sep='::', header=None, names=rnames,  engine='python')
 	mnames = ['movie_id', 'title', 'genres']
-	movies = pd.read_table('./data_files/ml-1m/movies.dat', sep='::', header=None, names=mnames,  engine='python')
+	movies = pd.read_table('/data_files/ml-1m/movies.dat', sep='::', header=None, names=mnames,  engine='python')
 	data = pd.merge(pd.merge(ratings, users), movies)
 	#Top Movies for user 1
 	print top_movies(data,1)

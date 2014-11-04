@@ -43,21 +43,47 @@ Theta2_grad = zeros(size(Theta2));
 X = [ones(m, 1) X];
 
 % Compute the first activation layer
-a1 = sigmoid(X*Theta1');
+z2 = X*Theta1';
+a2 = sigmoid(z2);
 
 % Add the bias unit to a1
-a1 = [ones(size(a1, 1), 1), a1];
+a2 = [ones(size(a2, 1), 1), a2];
 
 % Compute the second activation layer, in this case h
-h = sigmoid(a1*Theta2');
+z3 = a2*Theta2';
+h = sigmoid(z3);
 
-% Compute the cost
-for i = m
-	J = J + (-(y'*log(h(i,:)) + (1-y)'*log(1-h(i,:))) / m);
-endfor
+% Build the y matrix
+y_mat = eye(num_labels)(y,:);
+
+% Compute the unreg. cost
+unreg_cost = computeCost(y_mat, h, m);
+
+% Compute sumations of thetas excluding the bias colum
+reg_theta1 = sum(sum(Theta1(:,2:end).^2));
+reg_theta2 = sum(sum(Theta2(:,2:end).^2));
+
+% Compute the regularization term
+reg = lambda*(reg_theta1 + reg_theta2)/(2*m);
+
+% Compute J-of-theta
+J = unreg_cost + reg;
+
+
+
+% Going for backpropagation
+% Compute delta3, or output error
+d3 = h - y_mat;
+
+% Work backwards. Compute delta2
+d2 = d3*Theta2(:,2:end).*sigmoidGradient(z2);
+
+% Scaling thetas' gradients
+Theta1_grad = d2/m;
+Theta2_grad = d3/m;
 
 % ============================================================
 % Unroll gradients
-grad = [Theta1_grad(:) ; Theta2_grad(:)];
+% grad = [Theta1_grad(:) ; Theta2_grad(:)];
 
 end

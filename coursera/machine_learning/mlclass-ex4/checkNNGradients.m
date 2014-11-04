@@ -1,12 +1,6 @@
 function checkNNGradients(lambda)
 %CHECKNNGRADIENTS Creates a small neural network to check the
-%backpropagation gradients
-%   CHECKNNGRADIENTS(lambda) Creates a small neural network to check the
-%   backpropagation gradients, it will output the analytical gradients
-%   produced by your backprop code and the numerical gradients (computed
-%   using computeNumericalGradient). These two gradient computations should
-%   result in very similar values.
-%
+%backpropagation gradients produced by your backprop code and the numerical gradients (computed using computeNumericalGradient). These two gradient computations should result in very similar values.
 
 if ~exist('lambda', 'var') || isempty(lambda)
     lambda = 0;
@@ -20,6 +14,7 @@ m = 5;
 % We generate some 'random' test data
 Theta1 = debugInitializeWeights(hidden_layer_size, input_layer_size);
 Theta2 = debugInitializeWeights(num_labels, hidden_layer_size);
+
 % Reusing debugInitializeWeights to generate X
 X  = debugInitializeWeights(m, input_layer_size - 1);
 y  = 1 + mod(1:m, num_labels)';
@@ -28,14 +23,12 @@ y  = 1 + mod(1:m, num_labels)';
 nn_params = [Theta1(:) ; Theta2(:)];
 
 % Short hand for cost function
-costFunc = @(p) nnCostFunction(p, input_layer_size, hidden_layer_size, ...
-                               num_labels, X, y, lambda);
+costFunc = @(p) nnCostFunction(p, input_layer_size, hidden_layer_size, num_labels, X, y, lambda);
 
 [cost, grad] = costFunc(nn_params);
 numgrad = computeNumericalGradient(costFunc, nn_params);
 
-% Visually examine the two gradient computations.  The two columns
-% you get should be very similar. 
+% Visually examine the two gradient computations.  The two columns you get should be very similar. 
 disp([numgrad grad]);
 fprintf(['The above two columns you get should be very similar.\n' ...
          '(Left-Your Numerical Gradient, Right-Analytical Gradient)\n\n']);

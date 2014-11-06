@@ -54,7 +54,7 @@ z3 = a2*Theta2';
 h = sigmoid(z3);
 
 % Build the y matrix
-y_mat = eye(num_labels)(y,:);
+y_mat = eye(num_labels)(y,:); % What sorcery is this??
 
 % Compute the unreg. cost
 unreg_cost = computeCost(y_mat, h, m);
@@ -78,12 +78,20 @@ d3 = h - y_mat;
 % Work backwards. Compute delta2
 d2 = d3*Theta2(:,2:end).*sigmoidGradient(z2);
 
-% Scaling thetas' gradients
-Theta1_grad = d2/m;
-Theta2_grad = d3/m;
+% delta(l) := delta(l) + d(l+1)*a(l)
+delta2 = d3'*a2;
+delta1 = d2'*X;
+
+% Gradients with regularization
+% Don't regularize the first column because it's for the bias terms. Convert the first column to zeros
+% grad = delta/m + [column of 0, theta(:,2:end)]*lambda/m
+
+Theta1_grad = (delta1/m) + (lambda*[zeros(size(Theta1,1),1),Theta1(:,2:end)]/m);
+
+Theta2_grad = (delta2/m) + (lambda*[zeros(size(Theta2,1),1),Theta2(:,2:end)]/m);
 
 % ============================================================
 % Unroll gradients
-% grad = [Theta1_grad(:) ; Theta2_grad(:)];
+grad = [Theta1_grad(:) ; Theta2_grad(:)];
 
 end

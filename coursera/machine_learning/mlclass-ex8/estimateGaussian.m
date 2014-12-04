@@ -16,14 +16,16 @@ sigma2 = zeros(n, 1);
 % Instructions: Compute the mean of the data and the variances.
 % In particular, mu(i) should contain the mean of the data for the i-th feature and sigma2(i) should contain variance of the i-th feature.
 
-% Helper vector to implement a vectorized sumation
+% Helper vector for vectorized operations
 onesX = ones(m, 1);
 
-mu = (onesX'*X) / m;
+mu = ((onesX'*X) / m)';
 
-sigma = 
+% Helper matrix for vectorized operations
+muCol = repmat(mu', m, 1);
 
-
+sqDiff = (X - muCol).^2;
+sigma2 = ((onesX' * sqDiff) / m)';
 
 % =============================================================
 
